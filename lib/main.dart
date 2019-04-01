@@ -62,6 +62,7 @@ class _MyListScreenState extends State<MyListScreen> {
           title: Text("Lista de APIs"),
           actions: <Widget>[
             IconButton(
+              key: Key('favorite_icon'),
               icon: Icon(Icons.playlist_play),
               tooltip: 'Liked',
               onPressed: () => Navigator.push(
@@ -74,7 +75,7 @@ class _MyListScreenState extends State<MyListScreen> {
         body: ListView.builder(
           itemCount: apis.length,
           itemBuilder: (context, index) {
-            return new ApiItemList(apis[index]);
+            return new ApiItemList(index, apis[index]);
           },
         ));
   }

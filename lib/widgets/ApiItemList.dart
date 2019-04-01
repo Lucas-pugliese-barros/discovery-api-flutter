@@ -4,23 +4,21 @@ import 'package:discovery_api_flutter/models/ApiDTO.dart';
 import 'package:discovery_api_flutter/data/local/DBProvider.dart';
 
 class ApiItemList extends StatefulWidget {
-  final ApiDTO apiDTO;
+   int index;
+   ApiDTO apiDTO;
 
-  ApiItemList(ApiDTO apiDto)
-      : apiDTO = apiDto,
+  ApiItemList(int index, ApiDTO apiDto)
+      : index = index,
+        apiDTO = apiDto,
         super(key: new ObjectKey(apiDto));
 
   @override
   ApiItemState createState() {
-    return new ApiItemState(apiDTO);
+    return new ApiItemState();
   }
 }
 
 class ApiItemState extends State<ApiItemList> {
-  final ApiDTO apiDTO;
-
-  ApiItemState(this.apiDTO);
-
   @override
   Widget build(BuildContext context) {
     return new ListTile(
@@ -29,22 +27,23 @@ class ApiItemState extends State<ApiItemList> {
         children: <Widget>[
           new Expanded(
               child: new Text(
-            apiDTO.name,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                '${widget.index.toString()} ${widget.apiDTO.name}}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           )),
           new Checkbox(
-              value: apiDTO.isFavorited,
+              key: Key(widget.index.toString()),
+              value:  widget.apiDTO.isFavorited,
               onChanged: (bool value) {
                 setState(() {
-                  apiDTO.isFavorited = value;
+                  widget.apiDTO.isFavorited = value;
 
-                  if(apiDTO.isFavorited)
-                    DBProvider.db.likeApi(apiDTO);
+                  if(widget.apiDTO.isFavorited)
+                    DBProvider.db.likeApi(widget.apiDTO);
                 });
               })
         ],
       ),
-      subtitle: Text(apiDTO.description, style: TextStyle(fontSize: 16)),
+      subtitle: Text(widget.apiDTO.description, style: TextStyle(fontSize: 16)),
     );
   }
 }

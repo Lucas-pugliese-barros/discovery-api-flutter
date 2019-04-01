@@ -49,7 +49,7 @@ class _FavoriteApisState extends State<FavoriteApisScreen> {
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-                  return new ApiItemList(snapshot.data[index]);
+                  return new ApiItemList(index, snapshot.data[index]);
                 },
               );
             } else {

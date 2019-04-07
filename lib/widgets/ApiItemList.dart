@@ -27,7 +27,7 @@ class ApiItemState extends State<ApiItemList> {
         children: <Widget>[
           new Expanded(
               child: new Text(
-                '${widget.index.toString()} ${widget.apiDTO.name}}',
+                '${widget.index.toString()} ${widget.apiDTO.name}',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           )),
           new Checkbox(

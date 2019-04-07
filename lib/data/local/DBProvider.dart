@@ -7,6 +7,8 @@ import 'package:sqflite/sqflite.dart';
 
 import 'package:discovery_api_flutter/data/local/entities/ApiEntity.dart';
 import 'package:discovery_api_flutter/models/ApiDTO.dart';
+import 'package:discovery_api_flutter/utils/TimeTracker.dart';
+
 
 class DBProvider {
   DBProvider._();
@@ -32,7 +34,12 @@ class DBProvider {
   }
 
   likeApi(ApiDTO api) async {
-    print("liking api");
+    String TAG = 'LIKE_API';
+
+    DateTime startDate;
+    DateTime endDate;
+
+    startDate = TimeTracker.getCurrentTime(TAG, 'likeApi');
 
     final db = await database;
 
@@ -53,15 +60,27 @@ class DBProvider {
         [api.id, api.kind, api.name, api.version, api.title, api.description,
         api.discoveryRestUrl, api.documentationLink, api.preferred, api.isFavorited]);
 
+    endDate = TimeTracker.getCurrentTime(TAG, 'apiLiked');
+    TimeTracker.processingTime(TAG, startDate, endDate);
+
     return raw;
   }
 
   Future<List<ApiDTO>> getAllFavoriteApis() async {
-    print('getting all');
+    String TAG = 'LOCAL';
+
+    DateTime startDate;
+    DateTime endDate;
+
+    startDate = TimeTracker.getCurrentTime(TAG, 'loadApisList');
 
     final db = await database;
     var res = await db.query(ApiEntity.TABLE_NAME);
     List<ApiDTO> list = res.isNotEmpty ? res.map((c) => ApiDTO.fromMap(c)).toList() : [];
+
+    endDate = TimeTracker.getCurrentTime(TAG, 'updateApiList');
+    TimeTracker.processingTime(TAG, startDate, endDate);
+
     return list;
   }
 }

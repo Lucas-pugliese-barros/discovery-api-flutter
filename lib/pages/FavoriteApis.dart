@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 import 'package:discovery_api_flutter/models/ApiDTO.dart';
 import 'package:discovery_api_flutter/widgets/ApiItemList.dart';
@@ -22,7 +21,10 @@ class FavoriteApisScreen extends StatefulWidget {
 }
 
 class _FavoriteApisState extends State<FavoriteApisScreen> {
+  String TAG = 'LIST_LOCAL';
+
   var apis = new List<ApiDTO>();
+
   DateTime startDate;
   DateTime endDate;
 
@@ -44,8 +46,8 @@ class _FavoriteApisState extends State<FavoriteApisScreen> {
           future: DBProvider.db.getAllFavoriteApis(),
           builder: (BuildContext context, AsyncSnapshot<List<ApiDTO>> snapshot) {
             if (snapshot.hasData) {
-              endDate = TimeTracker.getCurrentTime();
-              TimeTracker.processingTime(startDate, endDate);
+              endDate = TimeTracker.getCurrentTime(TAG, 'ApisListLoaded');
+              TimeTracker.processingTime(TAG, startDate, endDate);
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
@@ -53,8 +55,7 @@ class _FavoriteApisState extends State<FavoriteApisScreen> {
                 },
               );
             } else {
-              print('no data');
-              startDate = TimeTracker.getCurrentTime();
+              startDate = TimeTracker.getCurrentTime(TAG, 'addingApisToList');
               return Center(child: CircularProgressIndicator());
             }
           },

@@ -17,6 +17,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Discovery Api Android',
       home: MyListScreen(),
+      theme: ThemeData(
+        primaryColor: Color(0xFF8BC34A),
+        primaryColorDark: Color(0xFF689F38),
+        primaryColorLight: Color(0xFFDCEDC8),
+        accentColor: Color(0xFFCDDC39)
+      ),
     );
   }
 }
@@ -27,7 +33,10 @@ class MyListScreen extends StatefulWidget {
 }
 
 class _MyListScreenState extends State<MyListScreen> {
+  String TAG = 'REMOTE';
+
   var apis = new List<ApiDTO>();
+
   DateTime startDate;
   DateTime endDate;
 
@@ -42,15 +51,16 @@ class _MyListScreenState extends State<MyListScreen> {
   }
 
   _getUsers() {
-    startDate = TimeTracker.getCurrentTime();
+    startDate = TimeTracker.getCurrentTime(TAG, 'loadApisList');
+
     ApiRemoteRepository.getApis().then((response) {
       setState(() {
         var data = json.decode(response.body);
         Iterable list = data['items'];
         apis = list.map((model) => ApiDTO.fromMap(model)).toList();
 
-        endDate = TimeTracker.getCurrentTime();
-        TimeTracker.processingTime(startDate, endDate);
+        endDate = TimeTracker.getCurrentTime(TAG, 'updateApiList');
+        TimeTracker.processingTime(TAG, startDate, endDate);
       });
     });
   }
@@ -73,6 +83,7 @@ class _MyListScreenState extends State<MyListScreen> {
           ],
         ),
         body: ListView.builder(
+          key: Key('api_list'),
           itemCount: apis.length,
           itemBuilder: (context, index) {
             return new ApiItemList(index, apis[index]);

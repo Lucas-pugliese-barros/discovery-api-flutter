@@ -11,6 +11,12 @@ class FavoriteApis extends StatelessWidget {
     return MaterialApp(
       title: 'Discovery Api Android',
       home: FavoriteApisScreen(),
+      theme: ThemeData(
+        primaryColor: Color(0xFF8BC34A),
+        primaryColorDark: Color(0xFF689F38),
+        primaryColorLight: Color(0xFFDCEDC8),
+        accentColor: Color(0xFFCDDC39)
+      )
     );
   }
 }

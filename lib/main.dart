@@ -51,7 +51,7 @@ class _MyListScreenState extends State<MyListScreen> {
   }
 
   _getUsers() {
-    startDate = TimeTracker.getCurrentTime(TAG, 'loadApisList');
+    TimeTracker.recordTime(TAG, 'loadApisList');
 
     ApiRemoteRepository.getApis().then((response) {
       setState(() {
@@ -59,8 +59,7 @@ class _MyListScreenState extends State<MyListScreen> {
         Iterable list = data['items'];
         apis = list.map((model) => ApiDTO.fromMap(model)).toList();
 
-        endDate = TimeTracker.getCurrentTime(TAG, 'updateApiList');
-        TimeTracker.processingTime(TAG, startDate, endDate);
+        TimeTracker.recordTime(TAG, 'updateApiList');
       });
     });
   }
@@ -88,6 +87,7 @@ class _MyListScreenState extends State<MyListScreen> {
           itemBuilder: (context, index) {
             return new ApiItemList(index, apis[index]);
           },
+
         ));
   }
 }

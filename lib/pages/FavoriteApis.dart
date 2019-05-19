@@ -27,12 +27,9 @@ class FavoriteApisScreen extends StatefulWidget {
 }
 
 class _FavoriteApisState extends State<FavoriteApisScreen> {
-  String TAG = 'LIST_LOCAL';
+  String TAG_LIST_LOCAL = 'LIST_LOCAL';
 
   var apis = new List<ApiDTO>();
-
-  DateTime startDate;
-  DateTime endDate;
 
   initState() {
     super.initState();
@@ -46,26 +43,32 @@ class _FavoriteApisState extends State<FavoriteApisScreen> {
   build(context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Lista de APIs"),
+          title: Text("APIs Favoritas"),
         ),
         body: FutureBuilder<List<ApiDTO>>(
           future: DBProvider.db.getAllFavoriteApis(),
           builder: (BuildContext context, AsyncSnapshot<List<ApiDTO>> snapshot) {
             if (snapshot.hasData) {
-              endDate = TimeTracker.getCurrentTime(TAG, 'ApisListLoaded');
-              TimeTracker.processingTime(TAG, startDate, endDate);
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-                  return new ApiItemList(index, snapshot.data[index]);
+                  var item = new ApiItemList(TAG_LIST_LOCAL, index, snapshot.data[index]);
+                  item.onItemCreated=onItemCreated;
+                  return item;
                 },
               );
             } else {
-              startDate = TimeTracker.getCurrentTime(TAG, 'addingApisToList');
               return Center(child: CircularProgressIndicator());
             }
           },
         )
     );
+  }
+
+  onItemCreated(int index) {
+    if(index == 3) {
+      TimeTracker.printResult();
+      DBProvider.db.deleteAllFavoriteApis();
+    }
   }
 }

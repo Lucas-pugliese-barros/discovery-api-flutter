@@ -33,7 +33,8 @@ class MyListScreen extends StatefulWidget {
 }
 
 class _MyListScreenState extends State<MyListScreen> {
-  String TAG = 'REMOTE';
+  String TAG_REMOTE = 'REMOTE';
+  String TAG_LIST_REMOTE = 'LIST_REMOTE';
 
   var apis = new List<ApiDTO>();
 
@@ -51,7 +52,7 @@ class _MyListScreenState extends State<MyListScreen> {
   }
 
   _getUsers() {
-    TimeTracker.recordTime(TAG, 'loadApisList');
+    TimeTracker.recordTime(TAG_REMOTE, 'loadApisList');
 
     ApiRemoteRepository.getApis().then((response) {
       setState(() {
@@ -59,7 +60,8 @@ class _MyListScreenState extends State<MyListScreen> {
         Iterable list = data['items'];
         apis = list.map((model) => ApiDTO.fromMap(model)).toList();
 
-        TimeTracker.recordTime(TAG, 'updateApiList');
+        TimeTracker.recordTime(TAG_REMOTE, 'updateApiList');
+        TimeTracker.recordTime(TAG_LIST_REMOTE, 'addingApisToList');
       });
     });
   }
@@ -85,9 +87,8 @@ class _MyListScreenState extends State<MyListScreen> {
           key: Key('api_list'),
           itemCount: apis.length,
           itemBuilder: (context, index) {
-            return new ApiItemList(index, apis[index]);
+            return new ApiItemList(TAG_LIST_REMOTE, index, apis[index]);
           },
-
         ));
   }
 }

@@ -14,16 +14,20 @@ class TimeTracker {
     _calculateProcessingTime(_timeHistory, tag);
   }
 
-  static DateTime getCurrentTime(String TAG, String message) {
-    DateTime dateTime = DateTime.now();
+  static void printResult() {
+    String titlesTag = "TITLES";
+    String valuesTag = "VALUES";
 
-    print('${TAG} ${message}: ${dateTime.toString()}');
+    StringBuffer titles = new StringBuffer();
+    StringBuffer values = new StringBuffer();
 
-    return dateTime;
-  }
+    _processingTimes.forEach((key, value) {
+      titles.write(key + ',');
+      values.write(value.toString() + ',');
+    });
 
-  static void processingTime(String tag, DateTime start, DateTime end) {
-    print('${tag} PROCESSING TIME: ${end.difference(start).inMilliseconds}');
+    print('${titlesTag}: ${titles.toString()}');
+    print('${valuesTag}: ${values.toString()}');
   }
 
   static LinkedHashMap updateHistory(LinkedHashMap timeHistory, String tag, DateTime dateTime) {

@@ -34,12 +34,6 @@ class DBProvider {
   }
 
   likeApi(ApiDTO api) async {
-    String TAG = 'LIKE_API';
-
-    DateTime startDate;
-    DateTime endDate;
-
-    startDate = TimeTracker.getCurrentTime(TAG, 'likeApi');
 
     final db = await database;
 
@@ -60,27 +54,27 @@ class DBProvider {
         [api.id, api.kind, api.name, api.version, api.title, api.description,
         api.discoveryRestUrl, api.documentationLink, api.preferred, api.isFavorited]);
 
-    endDate = TimeTracker.getCurrentTime(TAG, 'apiLiked');
-    TimeTracker.processingTime(TAG, startDate, endDate);
-
     return raw;
   }
 
   Future<List<ApiDTO>> getAllFavoriteApis() async {
-    String TAG = 'LOCAL';
+    String TAG_LOCAL = 'LOCAL';
+    String TAG_LIST_LOCAL = 'LIST_LOCAL';
 
-    DateTime startDate;
-    DateTime endDate;
-
-    startDate = TimeTracker.getCurrentTime(TAG, 'loadApisList');
+    TimeTracker.recordTime(TAG_LOCAL, 'loadApisList');
 
     final db = await database;
     var res = await db.query(ApiEntity.TABLE_NAME);
     List<ApiDTO> list = res.isNotEmpty ? res.map((c) => ApiDTO.fromMap(c)).toList() : [];
 
-    endDate = TimeTracker.getCurrentTime(TAG, 'updateApiList');
-    TimeTracker.processingTime(TAG, startDate, endDate);
+    TimeTracker.recordTime(TAG_LOCAL, 'updateApiList');
 
+    TimeTracker.recordTime(TAG_LIST_LOCAL, 'addingApisToList');
     return list;
+  }
+
+  void deleteAllFavoriteApis() async {
+    final db = await database;
+    await db.rawDelete('delete from ${ApiEntity.TABLE_NAME}');
   }
 }

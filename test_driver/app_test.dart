@@ -10,7 +10,7 @@ void main() {
     FlutterDriver driver;
 
     void clickApiItem() async {
-      for(var i = 0; i < 20; i++) {
+      for(var i = 0; i < 11; i++) {
         var apiItemList = find.byValueKey(i.toString());
 
         await driver.scrollUntilVisible(
@@ -31,16 +31,21 @@ void main() {
       if (driver != null) {
         driver.close();
       }
-    }); 
-    
+    });
+
+    test('check flutter driver health', () async {
+      Health health = await driver.checkHealth();
+      print(health.status);
+    });
+
     test('favorite apis of the list', () async {
-      await new Future.delayed(const Duration(seconds: 10), () => {
+      await new Future.delayed(const Duration(seconds: 25), () => {
         clickApiItem()
       });
     });
 
     test('click on favorite icon', () async {
-      await new Future.delayed(const Duration(seconds: 10), () => driver.tap(favoriteIcon));
+      await new Future.delayed(const Duration(seconds: 25), () => driver.tap(favoriteIcon));
     });
     
   });

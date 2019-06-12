@@ -10,7 +10,7 @@ void main() {
     FlutterDriver driver;
 
     void clickApiItem() async {
-      for(var i = 0; i < 11; i++) {
+      for(var i = 0; i < 6; i++) {
         var apiItemList = find.byValueKey(i.toString());
 
         await driver.scrollUntilVisible(
@@ -47,6 +47,10 @@ void main() {
     test('click on favorite icon', () async {
       await new Future.delayed(const Duration(seconds: 25), () => driver.tap(favoriteIcon));
     });
-    
+
+    test('finish', () async {
+      await new Future.delayed(const Duration(seconds: 25), () => true);
+    });
+
   });
 }

@@ -16,7 +16,8 @@ class FavoriteApis extends StatelessWidget {
         primaryColorDark: Color(0xFF689F38),
         primaryColorLight: Color(0xFFDCEDC8),
         accentColor: Color(0xFFCDDC39)
-      )
+      ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

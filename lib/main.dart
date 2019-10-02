@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         primaryColorLight: Color(0xFFDCEDC8),
         accentColor: Color(0xFFCDDC39)
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
